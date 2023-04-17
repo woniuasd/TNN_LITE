@@ -416,3 +416,5 @@ endif()
 if(TNN_DYNAMIC_RANGE_QUANTIZATION_ENABLE)
     add_subdirectory(tools/dynamic_range_quantization)
 endif()
+
+add_subdirectory(example)
