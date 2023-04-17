@@ -282,70 +282,9 @@ if(TNN_CPU_ENABLE)
     set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNCpu>")
 endif()
 
-if(TNN_ARM_ENABLE)
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
-
-    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-        add_definitions( -mfpu=neon )
-    endif()
-    add_subdirectory(source/tnn/device/arm)
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNArm>")
-    if(TNN_ARM82_ENABLE)
-        set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNArm82>")
-    endif()
-endif()
-
 if(TNN_OPENVINO_ENABLE)
     add_subdirectory(source/tnn/network/openvino)
     set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNOpenVINO>")
-endif()
-
-if(TNN_OPENCL_ENABLE)
-    include(FindPythonInterp REQUIRED)
-    if (NOT PYTHON_EXECUTABLE)
-        message (FATAL_ERROR "No Python installation found! It is required by OpenCL codegen.")
-    endif ()
-
-    if(SHARING_MEM_WITH_OPENGL)
-        add_definitions(-DSHARING_MEM_WITH_OPENGL)
-        add_definitions(-DCL_HPP_TARGET_OPENCL_VERSION=120)
-    endif()
-    add_subdirectory(source/tnn/device/opencl)
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNOpenCL>")
-endif()
-
-if(TNN_METAL_ENABLE)
-    add_subdirectory(source/tnn/device/metal)
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNMetal>")
-endif()
-
-if(TNN_APPLE_NPU_ENABLE)
-    add_subdirectory(source/tnn/network/coreml)
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNAppleNPU>")
-endif()
-
-if(TNN_CUDA_ENABLE)
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr")
-    add_subdirectory(source/tnn/device/cuda)
-    if(TNN_TENSORRT_ENABLE)
-        add_subdirectory(source/tnn/network/tensorrt)
-        set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNTensorRT>")
-    endif()
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNCuda>")
-endif()
-
-if(TNN_HUAWEI_NPU_ENABLE)
-    if(ANDROID_ABI STREQUAL "armeabi-v7a")
-        link_directories(
-                third_party/huawei_npu/hiai_ddk_latest/armeabi-v7a/
-        )
-    else()
-        link_directories(
-                third_party/huawei_npu/hiai_ddk_latest/arm64-v8a/
-        )
-    endif()
-    add_subdirectory(source/tnn/device/huawei_npu)
-    set(TARGET_OBJECTS ${TARGET_OBJECTS} "$<TARGET_OBJECTS:TNNNPU>")
 endif()
 
 if(TNN_BUILD_SHARED)

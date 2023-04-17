@@ -7,6 +7,7 @@ QUANTIZATION="OFF"
 CC=gcc
 CXX=g++
 
+rm -rf build
 mkdir build
 cd build
 
